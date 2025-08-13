@@ -1,0 +1,77 @@
+/* popup.css */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    width: 320px;
+    padding: 20px;
+    background: #f5f7fa;
+    color: #333;
+    box-sizing: border-box;
+    user-select: none;
+}
+
+h1 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #2c3e50;
+    text-align: center;
+    user-select: text;
+}
+
+textarea {
+    width: 80%;
+    height: 80px;
+    padding: 10px 12px;
+    font-size: 14px;
+    border: 1.8px solid #ddd;
+    border-radius: 8px;
+    resize: none;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+    transition: border-color 0.3s ease;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+textarea:focus {
+    border-color: #4a90e2;
+    outline: none;
+    box-shadow: 0 0 8px rgba(74, 144, 226, 0.4);
+    background-color: #fff;
+}
+
+button#checkBtn {
+    width: 90%;
+    text-align: center;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 12px 0;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
+}
+
+button#checkBtn:hover {
+    background-color: #357abd;
+    box-shadow: 0 6px 12px rgba(53, 122, 189, 0.5);
+}
+
+button#checkBtn:active {
+    background-color: #2d5d8a;
+    box-shadow: none;
+}
+
+#result {
+     width: 82%;
+    margin-top: 15px;
+    min-height: 40px;
+    font-size: 14px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #e9f0fb;
+    color: #2c3e50;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    word-wrap: break-word;
+}

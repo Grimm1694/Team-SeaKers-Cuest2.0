@@ -1,25 +1,25 @@
 {
   "manifest_version": 3,
-  "name": "Health Claim Verifier (Alert)",
+  "name": "Fact Checker Extension",
   "version": "1.0",
-  "description": "Verify health claims and show results in alert",
+  "description": "Checks selected text against backend and shows result.",
+  "permissions": ["contextMenus", "scripting", "activeTab", "storage"],
+  "host_permissions": ["<all_urls>"],
   "background": {
     "service_worker": "background.js"
   },
-  "content_scripts": [{
-    "matches": ["<all_urls>"],
-    "js": ["content.js"]
-  }],
-  "commands": {
-    "verify-claim": {
-      "suggested_key": {
-        "default": "Alt+Shift+C"
-      },
-      "description": "Verify selected health claim"
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
     }
   },
-  "permissions": ["activeTab"],
-  "host_permissions": [
-    "http://localhost:8000/*"
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content2.js"]
+    }
   ]
 }
