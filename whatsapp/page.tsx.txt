@@ -1,0 +1,281 @@
+import { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
+
+const Home = () => {
+  const [claimInput, setClaimInput] = useState('');
+  const [submittedClaim, setSubmittedClaim] = useState('');
+  const [showResults, setShowResults] = useState(false);
+  const [showSaved, setShowSaved] = useState(false);
+  const tickerRef = useRef<HTMLDivElement>(null);
+
+  const newsItems = [
+    "New study confirms effectiveness of mRNA vaccines",
+    "WHO updates guidelines on COVID-19 booster shots",
+    "Breakthrough in Alzheimer's research announced",
+    "Global initiative to improve mental health services",
+  ];
+
+  useEffect(() => {
+    // News ticker animation
+    const ticker = tickerRef.current;
+    if (!ticker) return;
+    
+    const duration = newsItems.length * 10;
+    ticker.style.animationDuration = `${duration}s`;
+  }, []);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (claimInput.trim()) {
+      setSubmittedClaim(claimInput);
+      setShowResults(true);
+      // Scroll to results
+      setTimeout(() => {
+        document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    show: { y: 0, opacity: 1 }
+  };
+
+  const cardVariants = {
+    hover: { 
+      y: -5,
+      boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
+      transition: { duration: 0.3 }
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Navbar */}
+      <nav className="container mx-auto px-4 py-6">
+        <motion.h1 
+          className="text-3xl font-bold"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          Health<span className="text-teal-600">Guard</span>
+        </motion.h1>
+      </nav>
+
+      {/* Hero Section */}
+      <section className="bg-teal-600 text-white py-4">
+        <div className="container mx-auto px-4 relative overflow-hidden">
+          <div className="flex items-center">
+            <span className="bg-white text-teal-600 font-bold px-3 py-1 mr-4 rounded">Verified News</span>
+            <div className="flex-1 overflow-hidden">
+              <motion.div 
+                ref={tickerRef}
+                className="whitespace-nowrap"
+                animate={{ x: ['100%', '-100%'] }}
+                transition={{ 
+                  repeat: Infinity,
+                  ease: 'linear',
+                  duration: newsItems.length * 10
+                }}
+              >
+                {newsItems.map((item, i) => (
+                  <span key={i} className="mx-8">{item}</span>
+                ))}
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Tutorial Section */}
+      <section className="py-16 container mx-auto px-4">
+        <h2 className="text-3xl font-bold text-center mb-12">How It Works</h2>
+        
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-100px" }}
+        >
+          {[1, 2, 3].map((step) => (
+            <motion.div 
+              key={step}
+              className="text-center p-6 bg-white rounded-xl shadow-md"
+              variants={itemVariants}
+              whileHover={{ y: -10 }}
+            >
+              <div className="w-12 h-12 flex items-center justify-center bg-teal-100 text-teal-600 rounded-full mx-auto mb-4 text-xl font-bold">
+                {step}
+              </div>
+              <h3 className="text-xl font-bold mb-2">
+                {step === 1 && 'Submit a Claim'}
+                {step === 2 && 'AI-Powered Analysis'}
+                {step === 3 && 'Get a Verdict'}
+              </h3>
+              <p className="text-gray-600">
+                {step === 1 && 'Paste any health-related text, from news, social media, or a message.'}
+                {step === 2 && 'Our RAG pipeline scans the text and cross-references it with trusted sources.'}
+                {step === 3 && 'Receive a clear verdict (True, False, Misleading) with citations.'}
+              </p>
+            </motion.div>
+          ))}
+        </motion.div>
+      </section>
+
+      {/* Claim Cards */}
+      <section className="py-16 bg-gray-100">
+        <div className="container mx-auto px-4">
+          <motion.div 
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-100px" }}
+          >
+            {[
+              {
+                text: '"Drinking lemon water is a miracle cure for all diseases."',
+                explanation: 'While lemons contain Vitamin C, there is no scientific evidence they can cure major diseases like cancer. Extreme claims of a "miracle cure" are a major red flag.'
+              },
+              {
+                text: '"Vaccines cause autism."',
+                explanation: 'This claim is based on a fraudulent, retracted study from 1998. Numerous large-scale studies since have found no link between vaccines and autism.'
+              },
+              {
+                text: '"You can \'detox\' your body with special teas or diets."',
+                explanation: 'Your liver and kidneys are highly effective, natural detoxification organs. Most "detox" products are unnecessary, unproven, and can sometimes be harmful.'
+              },
+              {
+                text: '"An alkaline diet can prevent or cure cancer."',
+                explanation: 'The body tightly regulates its own pH levels, and diet has no significant effect on blood pH. No scientific studies support the idea that an alkaline diet can treat disease.'
+              },
+              {
+                text: '"Microwaving food destroys its nutrients and is dangerous."',
+                explanation: 'Microwaving is a form of cooking. Like all cooking methods, it can cause some nutrient loss, but it\'s often less than boiling because of shorter cooking times. It does not make food radioactive or dangerous.'
+              },
+              {
+                text: '"If a product is \'natural,\' it\'s automatically safe to use."',
+                explanation: 'The term "natural" is unregulated. Many natural substances, like arsenic, lead, and certain plants (e.g., hemlock), can be highly toxic or deadly. The source of an ingredient does not determine its safety.'
+              }
+            ].map((claim, index) => (
+              <motion.div
+                key={index}
+                className="bg-white rounded-xl overflow-hidden shadow-md"
+                variants={itemVariants}
+                whileHover="hover"
+                variants={cardVariants}
+              >
+                <div className="p-5">
+                  <div className="flex items-start mb-3">
+                    <span className="text-xl mr-2">⚠️</span>
+                    <p className="font-medium">{claim.text}</p>
+                  </div>
+                  <p className="text-gray-600">
+                    <strong className="text-red-600">Debunked:</strong> {claim.explanation}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Claim Analyzer */}
+      <section className="py-16 container mx-auto px-4">
+        <motion.div 
+          className="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-6 md:p-8"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <h2 className="text-2xl font-bold text-center mb-2">Analyze a Claim</h2>
+          <p className="text-gray-600 text-center mb-6">Paste your content below</p>
+          
+          <form onSubmit={handleSubmit}>
+            <textarea
+              value={claimInput}
+              onChange={(e) => setClaimInput(e.target.value)}
+              placeholder="e.g., 'Drinking lemon water is a miracle cure for all diseases...'"
+              className="w-full h-40 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+            />
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full mt-4 bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-4 rounded-lg transition-colors"
+              type="submit"
+            >
+              Analyze
+            </motion.button>
+          </form>
+        </motion.div>
+      </section>
+
+      {/* Results Section */}
+      {showResults && (
+        <motion.section
+          id="results-section"
+          className="py-16 container mx-auto px-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-6 md:p-8">
+            <div className="mb-6">
+              <h4 className="font-bold text-gray-700 mb-2">Your Submitted Claim:</h4>
+              <p className="bg-gray-100 p-4 rounded-lg">{submittedClaim}</p>
+            </div>
+            
+            <h3 className="text-2xl font-bold mb-4">Analysis Result</h3>
+            
+            <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded mb-4">
+              <div className="flex items-start">
+                <span className="text-blue-500 font-bold mr-2">Verdict:</span>
+                <span className="font-bold text-red-600">False</span>
+              </div>
+              <p className="mt-2">
+                <span className="font-bold">Explanation:</span> This claim contains several inaccuracies. Lemon water has health benefits but is not a cure-all. Scientific evidence shows...
+              </p>
+            </div>
+            
+            <div>
+              <h4 className="font-bold mb-2">Trusted Sources:</h4>
+              <ul className="list-disc pl-5 space-y-1">
+                <li className="text-blue-600 hover:underline">
+                  <a href="#">WHO Nutrition Guidelines - 2023</a>
+                </li>
+                <li className="text-blue-600 hover:underline">
+                  <a href="#">Journal of Nutritional Science: Citrus Fruits Study</a>
+                </li>
+                <li className="text-blue-600 hover:underline">
+                  <a href="#">Mayo Clinic: Alternative Medicine Review</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </motion.section>
+      )}
+
+      {/* Footer */}
+      <footer className="bg-gray-800 text-white py-8">
+        <div className="container mx-auto px-4 text-center">
+          <p>&copy; 2025 HealthGuard. Not a substitute for professional medical advice.</p>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default Home;
