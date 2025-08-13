@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "Health Claim Verifier (Alert)",
+  "version": "1.0",
+  "description": "Verify health claims and show results in alert",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "js": ["content.js"]
+  }],
+  "commands": {
+    "verify-claim": {
+      "suggested_key": {
+        "default": "Alt+Shift+C"
+      },
+      "description": "Verify selected health claim"
+    }
+  },
+  "permissions": ["activeTab"],
+  "host_permissions": [
+    "http://localhost:8000/*"
+  ]
+}
